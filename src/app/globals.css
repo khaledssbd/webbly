@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/*
+ * Palette is defined once as raw CSS variables and mirrored into Tailwind's
+ * theme below, so `bg-surface` / `text-muted` resolve to the same values the
+ * hand-written rules use. Dark mode swaps the variables only — no utility in
+ * the app needs a `dark:` counterpart for colour.
+ */
+:root {
+  --canvas: #fbfbfa;
+  --surface: #ffffff;
+  --elevated: #f3f3f1;
+  --line: #e7e6e2;
+  --line-strong: #d5d4ce;
+  --ink: #1b1b19;
+  --muted: #6e6d68;
+  --subtle: #9c9b95;
+  --accent: #1d6068;
+  --accent-hover: #175057;
+  --accent-soft: #deecee;
+  --on-accent: #ffffff;
+  --danger: #c0473c;
+  --danger-hover: #ab3d33;
+  --danger-soft: #fbecea;
+  --highlight: #fbe6a2;
+  --shadow-panel: 0 1px 2px rgb(16 15 14 / 0.04), 0 12px 32px -8px rgb(16 15 14 / 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #121311;
+    --surface: #1a1b19;
+    --elevated: #232420;
+    --line: #2d2e2a;
+    --line-strong: #3d3e39;
+    --ink: #e9e8e3;
+    --muted: #9a998f;
+    --subtle: #6f6e66;
+    --accent: #5cbcc4;
+    --accent-hover: #74c9d0;
+    --accent-soft: #1a2d30;
+    --on-accent: #08191b;
+    --danger: #e0796d;
+    --danger-hover: #e98b80;
+    --danger-soft: #33211e;
+    --highlight: #6b5a1f;
+    --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -8px rgb(0 0 0 / 0.5);
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-soft: var(--danger-soft);
+  --color-highlight: var(--highlight);
+
+  --shadow-panel: var(--shadow-panel);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Mono",
+    Menlo, Consolas, monospace;
+}
+
+/* One focus treatment everywhere, so every control is visibly keyboard-reachable. */
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--accent-soft);
+    color: var(--ink);
+  }
+
+  /*
+   * Tailwind v4's Preflight leaves buttons on the default arrow cursor, unlike
+   * v3. Restoring it here covers every control at once — including ones added
+   * later — instead of repeating `cursor-pointer` on each element.
+   */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="menuitem"],
+  [role="treeitem"],
+  label[for] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Slim, low-contrast scrollbars so the panes stay calm. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--line-strong);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
